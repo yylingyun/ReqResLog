@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.0.8.RELEASE</spring-boot.version>
-        <faster.jakson.version>2.6.3</faster.jakson.version>
+        <faster.jakson.version>2.10.0.pr1</faster.jakson.version>
         <lombok.version>1.16.20</lombok.version>
     </properties>
 
