@@ -1,10 +1,8 @@
 package com.yytech.test;
 
-import com.yytech.logger.annotation.EnableReqResLog;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@EnableReqResLog
 @Configuration
 public class BeanConfig {
 
