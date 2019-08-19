@@ -113,4 +113,19 @@ public @interface ReqResLog {
      */
     String traceIdMethod() default "";
 
+    /**
+     * 是否可作为traceId的入口
+     * 当此属性为true且从当前的TransmittableThreadLocal中拿到的traceId为null时
+     * 把此方法拿到的traceId放入com.alibaba.ttl.TransmittableThreadLocal中
+     * 以供后面的方法使用
+     * -------------
+     * 如果在使用线程池的情况下还想保持traceId跨线程正常工作
+     * 则需要改动工程以符合TransmittableThreadLocal的使用规则
+     * 详情请见
+     * https://github.com/alibaba/transmittable-thread-local
+     *
+     * @return
+     */
+    boolean traceIdEntry() default false;
+
 }

@@ -88,6 +88,18 @@ public class ReqResLogProperties {
      */
     private String traceIdMethod;
 
+    /**
+     * 数据解析模式   MINIMAL/PROTECT
+     * -----------------------------
+     * MINIMAL: 默认配置，用不到的数据不进行解析。
+     * 如默认用slf4j记录日志，日志级别配置的是INFO
+     * 如果@ReqResLog中配置的是DEBUG级别，由于日志不会打印，所以不进行解析
+     * <p>
+     * PROTECT: 保护模式，一般需要自己实现日志记录的时候使用。
+     * 取到的值null替换为空，也可有效避免数据越界
+     */
+    private String attributeParsingType;
+
     public Level getLevelWithDefault(ReqResLog annotation) {
         Level first = Level.fromStr(annotation.level());
         Level second = Level.fromStr(this.level);
@@ -144,6 +156,11 @@ public class ReqResLogProperties {
     public String getTraceIdMethodWithDefault(ReqResLog annotation) {
         return ReqResLogUtil.getStringWithDefault(annotation.traceIdMethod(),
                 traceIdMethod, "");
+    }
+
+    public AttributeParsingType getAttributeParsingTypeWithDefault() {
+        AttributeParsingType attributeParsingType = AttributeParsingType.fromStr(this.attributeParsingType);
+        return attributeParsingType != null ? attributeParsingType : AttributeParsingType.MINIMAL;
     }
 
     public enum Level {
@@ -227,6 +244,21 @@ public class ReqResLogProperties {
         public static TraceType fromStr(String str) {
             if (StringUtil.isNotEmpty(str)) {
                 for (TraceType value : TraceType.values()) {
+                    if (value.toString().equalsIgnoreCase(str)) {
+                        return value;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    public enum AttributeParsingType {
+        MINIMAL, PROTECT;
+
+        public static AttributeParsingType fromStr(String str) {
+            if (StringUtil.isNotEmpty(str)) {
+                for (AttributeParsingType value : AttributeParsingType.values()) {
                     if (value.toString().equalsIgnoreCase(str)) {
                         return value;
                     }
