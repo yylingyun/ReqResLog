@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 @Aspect
+@Deprecated
 public class ReqResLogAspect {
 
     @Autowired
