@@ -32,7 +32,7 @@ public class Dog {
         }
     }
 
-    @ReqResLog
+    @ReqResLog(throwableLogLevel = "WARN")
     public void fly() {
         log.info("dog cat't fly, there is an Exception");
         throw new RuntimeException("DOG CAT'T FLY");

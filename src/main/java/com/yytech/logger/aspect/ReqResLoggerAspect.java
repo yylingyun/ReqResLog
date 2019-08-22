@@ -6,6 +6,8 @@ import com.yytech.logger.LoggerService;
 import com.yytech.logger.annotation.ReqResLog;
 import com.yytech.logger.autoconfig.ReqResLogProperties;
 import com.yytech.logger.util.ReqResLogUtil;
+import com.yytech.logger.util.StringUtil;
+import com.yytech.logger.util.TraceIdThreadLocal;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,6 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -50,6 +53,11 @@ public class ReqResLoggerAspect {
             //处理异常日志
             processThrowableLog(logAttributes, throwable);
             throw throwable;
+        } finally {
+            //释放ttl中的traceId信息
+            if (logAttributes != null && logAttributes.isTraceIdEntry()) {
+                TraceIdThreadLocal.release();
+            }
         }
     }
 
@@ -155,9 +163,8 @@ public class ReqResLoggerAspect {
             //设置当前context的title
             String title = reqResLogProperties.getTitleWithDefault(annotation);
             logAttributes.setTitle(title);
-            //TODO 设置traceId
-            String traceId = null;
-            logAttributes.setTraceId(traceId);
+            //设置traceId
+            parseAndSetTraceId(logAttributes, annotation, parameterTypes, pjpArgs);
             //设置类名和方法名
             logAttributes.setTargetClassSimpleName(targetClass.getSimpleName());
             logAttributes.setTargetClassTypeName(targetClass.getTypeName());
@@ -165,8 +172,7 @@ public class ReqResLoggerAspect {
             //设置请求参数标记与请求参数日志
             ReqResLogProperties.ReqParamMark reqParamMark = reqResLogProperties.getReqParamMarkWithDefault(annotation);
             ReqResLogProperties.LogType reqLogType = reqResLogProperties.getReqLogTypeWithDefault(annotation);
-            if (reqLogType != ReqResLogProperties.LogType.NONE
-                    && parameterTypes != null && parameterTypes.length > 0) {
+            if (reqLogType != ReqResLogProperties.LogType.NONE && parameterTypes != null && parameterTypes.length > 0) {
                 String[] reqParamMarks = new String[parameterTypes.length];
                 if (reqParamMark == ReqResLogProperties.ReqParamMark.TYPE) {
                     for (int i = 0; i < parameterTypes.length; i++) {
@@ -195,6 +201,57 @@ public class ReqResLoggerAspect {
         } catch (Throwable e) {
             log.error("ReqResLoggerAspect parseLogAttributes", e);
             return null;
+        }
+    }
+
+    /**
+     * 解析traceId
+     *
+     * @param logAttributes  日志解析属性
+     * @param annotation     方法上注解的内容
+     * @param parameterTypes 方法请求参数类型
+     * @param pjpArgs        方法实际的请求参数
+     * @return
+     */
+    private void parseAndSetTraceId(LogAttributes logAttributes, ReqResLog annotation, Class[] parameterTypes, Object[] pjpArgs) {
+        //从ttl获取traceId如果不为空的话，则直接使用
+        String traceIdFromTtl = TraceIdThreadLocal.getTraceId();
+        if (StringUtil.isNotEmpty(traceIdFromTtl)) {
+            logAttributes.setTraceId(traceIdFromTtl);
+            return;
+        }
+        //尝试获取新的traceId
+        String traceId = null;
+        ReqResLogProperties.TraceType traceType = reqResLogProperties.getTraceTypeWithDefault(annotation);
+        if (traceType == ReqResLogProperties.TraceType.UUID) {
+            //使用uuid记录trace信息
+            traceId = ReqResLogUtil.generateUuidId();
+        } else if (traceType == ReqResLogProperties.TraceType.METHOD) {
+            //从请求参数中获取traceId信息
+            String traceIdMethod = reqResLogProperties.getTraceIdMethodWithDefault(annotation);
+            if (StringUtil.isNotEmpty(traceIdMethod)) {
+                if (pjpArgs != null && pjpArgs.length > 0 && pjpArgs[0] != null) {
+                    if (parameterTypes != null && parameterTypes.length > 0) {
+                        try {
+                            Class<?> firstParameterType = parameterTypes[0];
+                            Method traceMethod = firstParameterType.getMethod(traceIdMethod, null);
+                            Object traceIdObj = traceMethod.invoke(pjpArgs[0]);
+                            if (traceIdObj != null) {
+                                traceId = traceIdObj.toString();
+                            }
+                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                            log.warn("ReqResLoggerAspect parseTraceId Exception", e);
+                        }
+                    }
+                }
+            }
+        }
+        if (StringUtil.isNotEmpty(traceId)) {
+            logAttributes.setTraceId(traceId);
+            boolean traceIdEntry = annotation.traceIdEntry();
+            if (traceIdEntry && TraceIdThreadLocal.setTraceId(traceId)) {
+                logAttributes.setTraceIdEntry(true);
+            }
         }
     }
 

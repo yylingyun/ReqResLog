@@ -15,6 +15,7 @@
         <spring-boot.version>2.0.8.RELEASE</spring-boot.version>
         <faster.jakson.version>2.10.0.pr1</faster.jakson.version>
         <lombok.version>1.16.20</lombok.version>
+        <alibaba.ttl.version>2.10.2</alibaba.ttl.version>
     </properties>
 
     <dependencyManagement>
@@ -72,6 +73,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${faster.jakson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+            <version>${alibaba.ttl.version}</version>
         </dependency>
     </dependencies>
 

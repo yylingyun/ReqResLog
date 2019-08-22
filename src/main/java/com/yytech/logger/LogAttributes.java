@@ -43,6 +43,13 @@ public class LogAttributes {
     private String traceId;
 
     /**
+     * 是否为获取traceId的入口
+     * 当此值为true的时候，说明该方法执行的时候，把获取到的traceId设置到了TraceIdThreadLocal中
+     * 在该方法执行完成之后，需要负责把TraceIdThreadLocal给release掉
+     */
+    private boolean traceIdEntry;
+
+    /**
      * 当前执行方法所属的类的simpleName
      */
     private String targetClassSimpleName;

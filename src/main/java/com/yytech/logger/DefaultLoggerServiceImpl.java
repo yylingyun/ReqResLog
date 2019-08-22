@@ -5,7 +5,7 @@ import com.yytech.logger.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Created by yangyue on 2019-08-20.
+ * 日志记录默认实现类
  */
 @Slf4j
 public class DefaultLoggerServiceImpl implements LoggerService {
