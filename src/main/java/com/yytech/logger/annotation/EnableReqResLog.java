@@ -1,6 +1,6 @@
 package com.yytech.logger.annotation;
 
-import com.yytech.logger.aspect.ReqResLogAspect;
+import com.yytech.logger.aspect.ReqResLoggerAspect;
 import com.yytech.logger.autoconfig.ReqResLogAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({ReqResLogAutoConfiguration.class, ReqResLogAspect.class})
+@Import({ReqResLogAutoConfiguration.class, ReqResLoggerAspect.class})
 public @interface EnableReqResLog {
 
 }

@@ -100,6 +100,7 @@ public @interface ReqResLog {
      * UUID：使用uuid作为traceId串联每一条日志
      * METHOD：详情请见traceIdMethod属性注释
      * NONE：不用额外数据进行日志的串联
+     * 备注：如果当前线程可以从TraceIdThreadLocal拿到非空traceId，则忽略配置属性，直接使用
      * -------------
      * 默认生效配置: NONE
      */
@@ -112,5 +113,20 @@ public @interface ReqResLog {
      * 3.第一个请求参数包含该无参方法且有返回值
      */
     String traceIdMethod() default "";
+
+    /**
+     * 是否可作为traceId的入口
+     * 当此属性为true且从当前的TraceIdThreadLocal中拿到的traceId为空时
+     * 把此方法拿到的traceId放入TraceIdThreadLocal中
+     * 以供后面的方法使用
+     * -------------
+     * 如果在使用线程池的情况下还想保持traceId跨线程正常工作
+     * 则需要改动工程以符合TransmittableThreadLocal的使用规则(个人认为改动不大)
+     * 详情请见
+     * https://github.com/alibaba/transmittable-thread-local
+     *
+     * @return
+     */
+    boolean traceIdEntry() default false;
 
 }

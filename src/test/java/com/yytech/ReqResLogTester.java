@@ -32,6 +32,8 @@ public class ReqResLogTester {
     @Autowired
     StudentManager studentManager;
 
+    @Autowired
+    Teacher teacher;
 
     @Test
     public void test1() throws JsonProcessingException {
@@ -63,10 +65,10 @@ public class ReqResLogTester {
         //使用UUID串联请求和返回日志
         dog.jump();
 
-        //不存在traceIdMethod方法，则traceId表示为NoSuchMethodException
+        //不存在traceIdMethod方法，会有warn级别的异常信息输出，不影响程序正常执行
         dog.eat("milk", "meat");
 
-        //里面存在一个RunTime异常，因为狗不会飞
+        //有一个RunTime异常日志打印，日志级别配置成了WARN，因为狗不会飞
         try {
             dog.fly();
         } catch (Exception e) {
@@ -82,6 +84,25 @@ public class ReqResLogTester {
         //请求参数的标记为字段名而不是字段类型，返回值用toString方法记录
         studentManager.subtractionScore(new Student("testName2", 90), 20);
 
+    }
+
+    @Test
+    public void test2() throws InterruptedException {
+        //同一个线程间的调用，多个方法保持traceId是一致的
+        teacher.addScore(new Student("testName1", 88), 10);
+
+        //new一个线程，父子线程关系，多个方法也能保持traceId一致
+        teacher.addScoreAsync(new Student("testName2", 88), 10);
+
+        //使用线程池，多个方法也能保持traceId一致
+        teacher.addScoreAsyncInPool(new Student("testName3", 88), 10);
+
+        //线程池的maxsize=1，因为线程池被TtlExecutors修饰过，所以线程池中线程复用的时候，也能取到新的正确的traceId
+        //(如果线程池去掉了TtlExecutors修饰，则线程再次使用的时候，拿到的是这个线程第一次使用时的traceId，不是我们想要的效果)
+        //本工程采用ttl来保证使用线程池时，调用链路context中traceId一致
+        //ttl使用详情请参考：https://github.com/alibaba/transmittable-thread-local
+        teacher.addScoreAsyncInPool(new Student("testName4", 88), 10);
+        Thread.sleep(3000L);
     }
 
 }

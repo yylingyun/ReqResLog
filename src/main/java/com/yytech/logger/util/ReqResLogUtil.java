@@ -3,12 +3,15 @@ package com.yytech.logger.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.*;
 import java.util.UUID;
 
 /**
  * 工具类
  */
+@Slf4j
 public class ReqResLogUtil {
 
     /**
@@ -68,6 +71,25 @@ public class ReqResLogUtil {
             return second;
         }
         return deft;
+    }
+
+    /**
+     * Throwable转换成堆栈字符串
+     *
+     * @param throwable
+     * @return
+     */
+    public static String getStackTrace(final Throwable throwable) {
+        if (throwable == null) {
+            return null;
+        }
+        try (final StringWriter sw = new StringWriter();
+             final PrintWriter pw = new PrintWriter(sw, true)) {
+            throwable.printStackTrace(pw);
+            return sw.getBuffer().toString();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 }

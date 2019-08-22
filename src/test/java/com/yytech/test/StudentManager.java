@@ -12,7 +12,7 @@ public class StudentManager {
         return student;
     }
 
-    @ReqResLog(reqParamMark = "NAME", resLogType = "TO_STRING")
+    @ReqResLog(traceType = "UUID", reqParamMark = "NAME", resLogType = "TO_STRING")
     public Student subtractionScore(Student student, int subtractionScore) {
         if (student != null) {
             student.setScore(student.getScore() - subtractionScore);
