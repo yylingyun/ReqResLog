@@ -5,12 +5,12 @@ ReqResLog是基于Spring AOP与反射机制实现自动记录方法Request, Resp
 它主要负责一个工程内的调用链路记录，并且提供机制使得这个工程内的调用可以与微服务之间的调用保持一致的traceId，从而使得调用链路更清晰，排查问题更容易。
 
 ### 简单入门 ###
-1. 引入maven依赖（目前并没有deploy到maven中央服务器，要使用的话得临时deploy到自己的私服上，后续我会把这个deploy到maven中央服务器，搞定后会更新这个页面）
+1. 引入maven依赖（已经发到了Maven中央服务器）
 ```xml
 <dependency>
-    <groupId>com.yytech.logger</groupId>
+    <groupId>com.github.yylingyun</groupId>
     <artifactId>x-yytech-logger</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.RELEASE</version>
 </dependency>
 ```
 2. SpringBoot启动类加上注解
