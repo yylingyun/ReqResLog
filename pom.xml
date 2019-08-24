@@ -13,6 +13,7 @@
     <description>Annotation based on AOP for SpringBoot project
         which can Auto-Recording method Request/Response/Throwable logs with traceId
     </description>
+    <url>https://github.com/yylingyun/ReqResLog</url>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
