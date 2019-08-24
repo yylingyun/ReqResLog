@@ -17,7 +17,7 @@ public class ReqResLogUtil {
     /**
      * 生成一个uuid
      *
-     * @return
+     * @return 一个随机生成的uuid
      */
     public static String generateUuidId() {
         return UUID.randomUUID().toString().replaceAll("-", "");
@@ -26,9 +26,9 @@ public class ReqResLogUtil {
     /**
      * 把对应转换成json打印出来
      *
-     * @param object
-     * @return
-     * @throws JsonProcessingException
+     * @param object 要转换成json的对象
+     * @return json字符串
+     * @throws JsonProcessingException json处理异常
      */
     public static String toJsonWithoutNull(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -39,11 +39,11 @@ public class ReqResLogUtil {
     /**
      * first非空优先取first，然后second非空取second，否则取deft值
      *
-     * @param first
-     * @param second
-     * @param deft
-     * @param <T>
-     * @return
+     * @param first  首选值
+     * @param second 备选值
+     * @param deft   默认值
+     * @param <T>    类型
+     * @return 最终选取值
      */
     public static <T> T getWithDefault(T first, T second, T deft) {
         if (first != null) {
@@ -58,10 +58,10 @@ public class ReqResLogUtil {
     /**
      * first非空优先取first，然后second非空取second，否则取deft值
      *
-     * @param first
-     * @param second
-     * @param deft
-     * @return
+     * @param first  首选值
+     * @param second 备选值
+     * @param deft   默认值
+     * @return 最终选取值
      */
     public static String getStringWithDefault(String first, String second, String deft) {
         if (StringUtil.isNotEmpty(first)) {
@@ -76,8 +76,8 @@ public class ReqResLogUtil {
     /**
      * Throwable转换成堆栈字符串
      *
-     * @param throwable
-     * @return
+     * @param throwable Throwable
+     * @return stackTrace
      */
     public static String getStackTrace(final Throwable throwable) {
         if (throwable == null) {

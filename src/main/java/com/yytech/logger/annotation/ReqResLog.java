@@ -19,7 +19,7 @@ import java.lang.annotation.*;
  * --------
  * 当然最终生效的代理方式可以用户进行强制指定，这个以用户指定为主
  * --------
- * 配置优先级：注解配置 > 全局配置 > 默认配置
+ * 配置优先级：first:注解配置 second:全局配置  third:默认配置
  *
  * @see com.yytech.logger.autoconfig.ReqResLogProperties
  */
@@ -31,11 +31,15 @@ public @interface ReqResLog {
      * 记录日志的级别 TRACE/DEBUG/INFO/WARN/ERROR
      * -------------
      * 默认生效配置: INFO
+     *
+     * @return level
      */
     String level() default "";
 
     /**
      * 记录日志的标题，在每行日志实际数据前会包含该内容
+     *
+     * @return title
      */
     String title() default "";
 
@@ -46,6 +50,8 @@ public @interface ReqResLog {
      * NONE：仅打印请求参数，不记录类型或名字
      * -------------
      * 默认生效配置：TYPE
+     *
+     * @return reqParamMark
      */
     String reqParamMark() default "";
 
@@ -55,6 +61,8 @@ public @interface ReqResLog {
      * NONE：不进行标记
      * -------------
      * 默认生效配置：TYPE
+     *
+     * @return resParamMark
      */
     String resParamMark() default "";
 
@@ -65,6 +73,8 @@ public @interface ReqResLog {
      * NONE: 仅记录req行为，不记录req实际数据
      * -------------
      * 默认生效配置：JSON
+     *
+     * @return reqLogType
      */
     String reqLogType() default "";
 
@@ -75,6 +85,8 @@ public @interface ReqResLog {
      * NONE: 仅记录res行为，不记录res实际数据
      * -------------
      * 默认生效配置：JSON
+     *
+     * @return resLogType
      */
     String resLogType() default "";
 
@@ -85,6 +97,8 @@ public @interface ReqResLog {
      * NONE：不进行异常记录
      * -------------
      * 默认生效配置：STACK
+     *
+     * @return throwableLogType
      */
     String throwableLogType() default "";
 
@@ -92,6 +106,8 @@ public @interface ReqResLog {
      * 记录throwable日志的级别 TRACE/DEBUG/INFO/WARN/ERROR
      * -------------
      * 默认生效配置: ERROR
+     *
+     * @return throwableLogLevel
      */
     String throwableLogLevel() default "";
 
@@ -103,6 +119,8 @@ public @interface ReqResLog {
      * 备注：如果当前线程可以从TraceIdThreadLocal拿到非空traceId，则忽略配置属性，直接使用
      * -------------
      * 默认生效配置: NONE
+     *
+     * @return traceType
      */
     String traceType() default "";
 
@@ -111,6 +129,8 @@ public @interface ReqResLog {
      * 1.traceType为method
      * 2.请求参数个数大于等于1
      * 3.第一个请求参数包含该无参方法且有返回值
+     *
+     * @return traceIdMethod
      */
     String traceIdMethod() default "";
 
@@ -125,7 +145,7 @@ public @interface ReqResLog {
      * 详情请见
      * https://github.com/alibaba/transmittable-thread-local
      *
-     * @return
+     * @return traceIdEntry
      */
     boolean traceIdEntry() default false;
 

@@ -8,8 +8,8 @@ public class StringUtil {
     /**
      * 判断字符串是否为空
      *
-     * @param str
-     * @return
+     * @param str 要被判断的字符串
+     * @return 是否为空
      */
     public static boolean isEmpty(String str) {
         return (str == null || str.trim().isEmpty());
@@ -18,8 +18,8 @@ public class StringUtil {
     /**
      * 判断字符串是否非空
      *
-     * @param str
-     * @return
+     * @param str 要被判断的字符串
+     * @return 是否非空
      */
     public static boolean isNotEmpty(String str) {
         return !isEmpty(str);

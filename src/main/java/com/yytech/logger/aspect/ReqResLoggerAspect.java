@@ -34,9 +34,9 @@ public class ReqResLoggerAspect {
     /**
      * 代理被ReqResLog注释的方法，记录它的ReqResLog
      *
-     * @param pjp
-     * @return
-     * @throws Throwable
+     * @param pjp ProceedingJoinPoint
+     * @return 被代理的原方法返回值
+     * @throws Throwable 被代理的原方法抛的Throwable
      */
     @Around("@annotation(com.yytech.logger.annotation.ReqResLog)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
@@ -64,7 +64,7 @@ public class ReqResLoggerAspect {
     /**
      * 处理Req日志
      *
-     * @param logAttributes
+     * @param logAttributes 日志参数
      */
     private void processReqLog(LogAttributes logAttributes) {
         try {
@@ -80,8 +80,8 @@ public class ReqResLoggerAspect {
     /**
      * 处理Res日志
      *
-     * @param logAttributes
-     * @param response
+     * @param logAttributes 日志参数
+     * @param response      被代理的原方法返回值
      */
     private void processResLog(LogAttributes logAttributes, Object response) {
         try {
@@ -101,8 +101,8 @@ public class ReqResLoggerAspect {
     /**
      * 处理异常日志
      *
-     * @param logAttributes
-     * @param throwable
+     * @param logAttributes 日志参数
+     * @param throwable     被代理的原方法的throwable
      */
     private void processThrowableLog(LogAttributes logAttributes, Throwable throwable) {
         try {
@@ -125,8 +125,8 @@ public class ReqResLoggerAspect {
     /**
      * 解析日志记录可能用到的各个属性
      *
-     * @param pjp
-     * @return
+     * @param pjp ProceedingJoinPoint
+     * @return 当前可以解析到的日志参数
      */
     private LogAttributes parseLogAttributes(ProceedingJoinPoint pjp) {
         try {
@@ -211,7 +211,6 @@ public class ReqResLoggerAspect {
      * @param annotation     方法上注解的内容
      * @param parameterTypes 方法请求参数类型
      * @param pjpArgs        方法实际的请求参数
-     * @return
      */
     private void parseAndSetTraceId(LogAttributes logAttributes, ReqResLog annotation, Class[] parameterTypes, Object[] pjpArgs) {
         //从ttl获取traceId如果不为空的话，则直接使用
@@ -258,8 +257,8 @@ public class ReqResLoggerAspect {
     /**
      * 根据LogType把对象转换成Json格式或者toString格式的字符串
      *
-     * @param logType
-     * @param object
+     * @param logType 日志记录类别
+     * @param object  要被记录的对象
      * @return
      */
     private String toJsonOrString(ReqResLogProperties.LogType logType, Object object) throws JsonProcessingException {

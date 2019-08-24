@@ -54,8 +54,8 @@ public class DefaultLoggerServiceImpl implements LoggerService {
     /**
      * 获取请求日志
      *
-     * @param logAttributes
-     * @return
+     * @param logAttributes 日志参数
+     * @return req日志内容
      */
     protected String getReqLog(LogAttributes logAttributes) {
         StringBuilder sb = getLogPrefixStringBuilder(logAttributes);
@@ -77,8 +77,8 @@ public class DefaultLoggerServiceImpl implements LoggerService {
     /**
      * 获取返回日志
      *
-     * @param logAttributes
-     * @return
+     * @param logAttributes 日志参数
+     * @return res日志内容
      */
     protected String getResLog(LogAttributes logAttributes) {
         StringBuilder sb = getLogPrefixStringBuilder(logAttributes);
@@ -98,8 +98,8 @@ public class DefaultLoggerServiceImpl implements LoggerService {
     /**
      * 获取Throwable日志
      *
-     * @param logAttributes
-     * @return
+     * @param logAttributes 日志参数
+     * @return throwable日志内容
      */
     protected String getThrowableLog(LogAttributes logAttributes) {
         StringBuilder sb = getLogPrefixStringBuilder(logAttributes);
@@ -112,8 +112,8 @@ public class DefaultLoggerServiceImpl implements LoggerService {
     /**
      * 获取日志前缀
      *
-     * @param logAttributes
-     * @return
+     * @param logAttributes 日志前缀
+     * @return 包含日志前缀的StringBuilder
      */
     protected StringBuilder getLogPrefixStringBuilder(LogAttributes logAttributes) {
         StringBuilder sb = new StringBuilder();
@@ -132,8 +132,8 @@ public class DefaultLoggerServiceImpl implements LoggerService {
     /**
      * 记录日志
      *
-     * @param level
-     * @param logContent
+     * @param level      日志记录级别
+     * @param logContent 实际日志内容
      */
     protected void writeLog(ReqResLogProperties.Level level, String logContent) {
         if (level == ReqResLogProperties.Level.TRACE) {

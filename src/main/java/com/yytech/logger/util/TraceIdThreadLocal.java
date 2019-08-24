@@ -12,8 +12,8 @@ public class TraceIdThreadLocal {
     /**
      * 把traceId设置到ttl中，只有非空的traceId才能设置成功
      *
-     * @param traceId
-     * @return
+     * @param traceId 希望在当前context使用的traceId
+     * @return 设置是否成功
      */
     public static boolean setTraceId(String traceId) {
         if (StringUtil.isEmpty(traceId)) {
@@ -26,7 +26,7 @@ public class TraceIdThreadLocal {
     /**
      * 从ttl中获取traceId
      *
-     * @return
+     * @return 当前context中的traceId
      */
     public static String getTraceId() {
         return traceIdTtl.get();
